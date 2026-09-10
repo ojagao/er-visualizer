@@ -1,0 +1,67 @@
+/**
+ * アプリ全体で共有する定数
+ * (マジックナンバーをここに集約し、各モジュールから参照する)
+ */
+const APP_CONFIG = Object.freeze({
+  // テーブルカードの寸法 (レイアウト計算・接続線のフォールバックに使用)
+  card: Object.freeze({
+    width: 300,
+    headerHeight: 44,
+    bodyPadding: 16,
+    rowHeight: 29,
+    bodyMaxHeight: 380,
+    fallbackHeight: 280,
+  }),
+
+  // 自動整列時の開始座標・カード間隔
+  layout: Object.freeze({
+    startX: 80,
+    startY: 100,
+    gapX: 90,
+    gapY: 80,
+  }),
+
+  // ズーム範囲・感度
+  zoom: Object.freeze({
+    min: 0.15,
+    max: 2.5,
+    // ホイール: deltaY 1px あたりの対数ズーム量 (マウス 1 ノッチ ≒ 100px → 約 6%)
+    wheelSensitivity: 0.0006,
+    // ホイール 1 イベントあたりの最大倍率 (トラックパッドの急な入力を抑える)
+    wheelMaxFactor: 1.15,
+    // deltaMode が行 / ページ単位のときの px 換算
+    lineDeltaPx: 16,
+    pageDeltaPx: 400,
+    // +/- ボタン 1 回あたりの倍率
+    buttonStep: 1.1,
+    fitMin: 0.2,
+    fitMax: 1.05,
+    fitPadding: 80,
+  }),
+
+  // 初期ビュー
+  view: Object.freeze({
+    scale: 0.85,
+    translateX: 40,
+    translateY: 40,
+  }),
+
+  // カードドラッグをクリックと区別するしきい値 (px)
+  drag: Object.freeze({
+    thresholdPx: 3,
+  }),
+
+  // 接続線の形状
+  connection: Object.freeze({
+    sideThresholdPx: 80,
+    curveX: 0.5,
+    curveY: 0.2,
+  }),
+
+  // Tailwind CDN のスタイル適用を待つための描画ディレイ (ms)
+  timing: Object.freeze({
+    toggleRenderMs: 50,
+    parseRenderMs: 80,
+    initialRenderMs: 150,
+  }),
+});

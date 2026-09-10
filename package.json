@@ -1,0 +1,10 @@
+{
+  "name": "er-visualizer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SQL DDL から ER 図を生成・可視化する静的 Web アプリ",
+  "scripts": {
+    "test": "node --test",
+    "serve": "python3 -m http.server 8080"
+  }
+}

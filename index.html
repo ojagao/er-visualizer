@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Database ER Diagram Studio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="bg-slate-950 text-slate-100 flex flex-col h-screen overflow-hidden select-none font-sans">
+
+  <!-- ヘッダーツールバー -->
+  <header class="bg-slate-900/95 backdrop-blur border-b border-slate-800 px-4 py-2 flex flex-wrap items-center justify-between gap-3 z-30 shadow-lg shrink-0">
+    <div class="flex items-center gap-3">
+      <div class="p-2 bg-gradient-to-tr from-indigo-600 via-blue-600 to-cyan-500 rounded-lg shadow-md shadow-indigo-500/25">
+        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2 1.5 3 3.5 3h9c2 0 3.5-1 3.5-3V7c0-2-1.5-3-3.5-3h-9C5.5 4 4 5 4 7zm0 5h16M4 12c0 2 1.5 3 3.5 3h9c2 0 3.5-1 3.5-3" />
+        </svg>
+      </div>
+      <div>
+        <div class="flex items-center gap-2">
+          <h1 class="font-bold text-base md:text-lg tracking-tight text-white flex items-center gap-2">
+            ER Studio
+            <span class="text-[10px] font-normal tracking-wide px-1.5 py-0.5 rounded bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">Universal DDL Parser</span>
+          </h1>
+          <span id="table-count-badge" class="px-2 py-0.5 text-[11px] font-semibold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 rounded-full">0 Tables</span>
+        </div>
+        <p class="text-[11px] text-slate-400">任意のSQLスキーマをインポートして自動レイアウト・視覚化</p>
+      </div>
+    </div>
+
+    <!-- アクションボタングループ -->
+    <div class="flex flex-wrap items-center gap-2">
+      <!-- スキーマ入力モーダルを開くボタン -->
+      <button
+        id="btn-open-schema-modal"
+        class="px-3 py-1.5 text-xs font-semibold bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white rounded-lg shadow-sm shadow-indigo-600/30 transition flex items-center gap-1.5 border border-indigo-400/30">
+        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        <span>スキーマ入力 (SQL)</span>
+      </button>
+
+      <!-- 自動整列ボタン -->
+      <button
+        id="btn-auto-layout"
+        title="テーブルを重ならないよう自動配置"
+        class="px-2.5 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-200 font-medium transition flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+        <span>自動整列</span>
+      </button>
+
+      <!-- 検索 -->
+      <div class="relative">
+        <input
+          id="search-input"
+          type="text"
+          placeholder="テーブル / カラム検索..."
+          class="bg-slate-800 border border-slate-700 rounded-lg pl-2.5 pr-7 py-1.5 text-xs text-slate-100 placeholder-slate-400 focus:outline-none focus:border-indigo-500 w-36 md:w-48 transition"
+        />
+        <button id="search-clear" class="hidden absolute right-2 top-1.5 text-slate-400 hover:text-white text-xs">✕</button>
+      </div>
+
+      <!-- 表示モード切替 -->
+      <button
+        id="toggle-columns-btn"
+        title="キー列のみ / 全カラム"
+        class="px-2.5 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-300 font-medium transition flex items-center gap-1.5">
+        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
+        <span id="columns-mode-text">主要列のみ</span>
+      </button>
+
+      <!-- ズーム操作バー -->
+      <div class="bg-slate-800 rounded-lg p-0.5 flex items-center gap-1 border border-slate-700">
+        <button id="btn-zoom-out" title="縮小" class="p-1.5 hover:bg-slate-700 rounded text-slate-200 transition">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>
+        </button>
+        <span id="zoom-label" class="text-xs font-mono text-slate-300 px-1.5 min-w-[45px] text-center select-none font-semibold">100%</span>
+        <button id="btn-zoom-in" title="拡大" class="p-1.5 hover:bg-slate-700 rounded text-slate-200 transition">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        </button>
+        <div class="w-px h-4 bg-slate-700 mx-0.5"></div>
+        <button id="btn-fit" title="画面全体に収める" class="px-2 py-1 text-xs font-medium hover:bg-slate-700 rounded text-slate-200 transition">
+          全体表示
+        </button>
+      </div>
+
+      <!-- JSONエクスポート -->
+      <button
+        id="btn-export-json"
+        title="スキーマ定義をJSON保存"
+        class="p-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-300 transition">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- キャンバスエリア -->
+  <main id="workspace" class="relative flex-1 overflow-hidden canvas-grid cursor-default">
+    <!-- ズーム・パン用トランスフォームコンテナ -->
+    <div id="viewport" class="absolute origin-top-left will-change-transform pointer-events-none" style="width: 5000px; height: 5000px;">
+
+      <!-- リレーション接続線 SVGレイヤー -->
+      <svg id="connections-svg" class="absolute inset-0 w-full h-full pointer-events-none z-0">
+        <defs>
+          <marker id="marker-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b" />
+          </marker>
+          <marker id="marker-arrow-highlight" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M 0 1 L 10 5 L 0 9 z" fill="#38bdf8" />
+          </marker>
+          <marker id="marker-circle" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="5" markerHeight="5">
+            <circle cx="5" cy="5" r="3" fill="#64748b" />
+          </marker>
+        </defs>
+        <g id="relations-group"></g>
+      </svg>
+
+      <!-- テーブルカード配置コンテナ -->
+      <div id="tables-container" class="absolute inset-0 pointer-events-auto z-10"></div>
+    </div>
+
+    <!-- ミニ凡例 / 操作ガイド -->
+    <div data-no-pan class="absolute bottom-4 left-4 bg-slate-900/90 backdrop-blur-md border border-slate-800 px-3.5 py-2.5 rounded-xl shadow-xl z-20 flex flex-col gap-1.5 text-xs text-slate-300 pointer-events-auto max-w-sm">
+      <div class="flex items-center gap-3 text-[11px] font-medium flex-wrap">
+        <span class="flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-sm bg-amber-400"></span> PK (主キー)
+        </span>
+        <span class="flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-sm bg-sky-400"></span> FK (外部キー)
+        </span>
+        <span class="flex items-center gap-1.5">
+          <span class="w-2.5 h-2.5 rounded-sm bg-purple-400"></span> 推測リレーション
+        </span>
+      </div>
+      <div class="text-[11px] text-slate-400 border-t border-slate-800 pt-1.5">
+        <span>背景ドラッグ: 移動 / ホイール: ズーム / テーブルドラッグ: 配置変更 / クリック: 関連強調</span>
+      </div>
+    </div>
+  </main>
+
+  <!-- スキーマ入力・インポートモーダル -->
+  <div id="schema-modal" class="fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4 hidden">
+    <div class="modal-panel bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl w-full max-w-3xl flex flex-col max-h-[90vh] overflow-hidden">
+
+      <!-- モーダルヘッダー -->
+      <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/80">
+        <div>
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
+            <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+            SQLスキーマ (DDL) のインポート
+          </h2>
+          <p class="text-xs text-slate-400 mt-0.5">PostgreSQL, MySQL, SQLite等の CREATE TABLE / ALTER TABLE 文を解析します</p>
+        </div>
+        <button id="btn-close-modal" class="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition">✕</button>
+      </div>
+
+      <!-- モーダルコンテンツ -->
+      <div class="p-6 overflow-y-auto space-y-4 flex-1">
+        <!-- プリセット選択バー -->
+        <div class="flex items-center justify-between gap-2 flex-wrap bg-slate-800/60 p-2.5 rounded-xl border border-slate-800">
+          <span class="text-xs font-semibold text-slate-300">サンプルスキーマを試す:</span>
+          <div class="flex gap-2">
+            <button id="preset-blog" class="px-2.5 py-1 text-xs bg-slate-700 hover:bg-indigo-600 rounded-md text-slate-200 transition">ブログ / CMS</button>
+            <button id="preset-ecommerce" class="px-2.5 py-1 text-xs bg-slate-700 hover:bg-indigo-600 rounded-md text-slate-200 transition">ECショップ</button>
+            <button id="preset-clear" class="px-2.5 py-1 text-xs bg-slate-800 hover:bg-rose-900/50 text-slate-400 hover:text-rose-200 rounded-md border border-slate-700 transition">クリア</button>
+          </div>
+        </div>
+
+        <!-- テキストエリア -->
+        <div class="space-y-1.5">
+          <label for="sql-input" class="text-xs font-semibold text-slate-300 flex items-center justify-between">
+            <span>SQL (CREATE TABLE / ALTER TABLE / FOREIGN KEY 制約など)</span>
+            <span id="sql-stats" class="text-[11px] text-slate-500 font-mono">0 文字</span>
+          </label>
+          <textarea
+            id="sql-input"
+            rows="13"
+            placeholder="CREATE TABLE users ( id SERIAL PRIMARY KEY, name VARCHAR(100), ... );"
+            class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3.5 font-mono text-xs text-indigo-100 placeholder-slate-600 focus:outline-none focus:border-indigo-500 leading-relaxed transition"
+          ></textarea>
+        </div>
+
+        <!-- オプションチェックボックス -->
+        <div class="bg-slate-800/40 p-3 rounded-xl border border-slate-800 space-y-2">
+          <label class="flex items-center gap-2 cursor-pointer select-none text-xs text-slate-200">
+            <input type="checkbox" id="opt-infer-fk" checked class="rounded bg-slate-900 border-slate-700 text-indigo-600 focus:ring-0 focus:ring-offset-0">
+            <span>外部キー未定義のカラムも命名規則から推測してリレーションを繋ぐ (<code class="text-sky-300">xxx_id</code> → <code class="text-amber-300">xxx.id</code> など)</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- モーダルフッター -->
+      <div class="px-6 py-3.5 border-t border-slate-800 bg-slate-900/80 flex items-center justify-between">
+        <div id="parse-status-msg" class="text-xs text-slate-400 font-mono"></div>
+        <div class="flex items-center gap-2">
+          <button id="btn-cancel-modal" class="px-4 py-2 text-xs font-medium text-slate-400 hover:text-slate-200 transition">キャンセル</button>
+          <button id="btn-parse-and-render" class="px-5 py-2 text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl shadow-md shadow-indigo-600/30 transition flex items-center gap-2">
+            <span>ER図を生成する</span>
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- スクリプト (依存順に読み込み) -->
+  <script src="js/config.js"></script>
+  <script src="js/presets.js"></script>
+  <script src="js/ddl-parser.js"></script>
+  <script src="js/auto-layout.js"></script>
+  <script src="js/state.js"></script>
+  <script src="js/dom.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/card-template.js"></script>
+  <script src="js/card-drag.js"></script>
+  <script src="js/render-tables.js"></script>
+  <script src="js/render-connections.js"></script>
+  <script src="js/diagram.js"></script>
+  <script src="js/viewport.js"></script>
+  <script src="js/schema-modal.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

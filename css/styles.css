@@ -1,0 +1,66 @@
+/* ER Studio カスタムスタイル (Tailwind ユーティリティで表現しにくい部分のみ) */
+
+/* キャンバス方眼ドット背景 */
+.canvas-grid {
+  background-color: #0b0f19;
+  background-image: radial-gradient(#1e293b 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+}
+
+/* ドラッグ可能なテーブルカード */
+.draggable-card {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+}
+
+.draggable-card:active {
+  cursor: grabbing;
+}
+
+/* リレーション線のトランジション */
+.relation-path {
+  transition: stroke 0.2s ease, stroke-width 0.2s ease, opacity 0.2s ease;
+}
+
+/* モーダル背景 */
+.modal-backdrop {
+  background: rgba(3, 7, 18, 0.75);
+  backdrop-filter: blur(4px);
+}
+
+/* モーダル本体の出現アニメーション (body の select-none を解除してテキスト選択を許可) */
+@keyframes modal-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-panel {
+  animation: modal-in 150ms ease-out;
+  user-select: text;
+}
+
+/* カスタムスクロールバー */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
