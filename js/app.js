@@ -26,10 +26,15 @@ function setupSearch() {
   dom.searchClear.addEventListener('click', clearSearch);
 }
 
-/** 主要列のみ / 全カラム 表示を切り替える */
-function toggleColumnsMode() {
-  const { showOnlyKeys } = appState.update((state) => ({ showOnlyKeys: !state.showOnlyKeys }));
+/** 列表示モードを状態とボタン表記に反映 (描画は呼び出し側で行う) */
+function applyColumnsMode(showOnlyKeys) {
+  appState.update({ showOnlyKeys });
   dom.columnsModeText.textContent = showOnlyKeys ? COLUMNS_MODE_LABEL.keysOnly : COLUMNS_MODE_LABEL.all;
+}
+
+/** 主要列のみ / 全カラム 表示を切り替える (ボタンとキーボードショートカットから呼ばれる) */
+function toggleColumnsMode() {
+  applyColumnsMode(!appState.get().showOnlyKeys);
   renderTables();
   window.setTimeout(renderConnections, APP_CONFIG.timing.toggleRenderMs);
 }
@@ -67,9 +72,30 @@ function setupToolbar() {
 
 /** 初期ロード: ブログ / CMS サンプルを自動読み込み */
 function loadDefaultSchema() {
-  setSqlInput(SCHEMA_PRESETS.blog);
-  const parsed = UniversalDDLParser.parse(SCHEMA_PRESETS.blog, { inferFk: true });
-  applyParsedSchema(parsed, APP_CONFIG.timing.initialRenderMs);
+  const sql = SCHEMA_PRESETS.blog;
+  setSqlInput(sql);
+  dom.optInferFk.checked = true;
+  const parsed = UniversalDDLParser.parse(sql, { inferFk: true });
+  applyParsedSchema(parsed, APP_CONFIG.timing.initialRenderMs, { source: { sql, inferFk: true } });
+}
+
+/** 前回の作業状態があれば復元する (復元できた場合 true) */
+function restoreWorkspace() {
+  const snapshot = loadWorkspaceSnapshot();
+  if (!snapshot) return false;
+
+  const parsed = UniversalDDLParser.parse(snapshot.sql, { inferFk: snapshot.inferFk });
+  if (!parsed.tables.length) return false;
+
+  setSqlInput(snapshot.sql);
+  dom.optInferFk.checked = snapshot.inferFk;
+  applyColumnsMode(snapshot.showOnlyKeys);
+  applyParsedSchema(parsed, APP_CONFIG.timing.initialRenderMs, {
+    source: { sql: snapshot.sql, inferFk: snapshot.inferFk },
+    positions: snapshot.positions,
+    view: snapshot.view,
+  });
+  return true;
 }
 
 function init() {
@@ -79,7 +105,9 @@ function init() {
   setupKeyboardShortcuts();
   setupSearchNavigation();
   window.addEventListener('resize', renderConnections);
-  loadDefaultSchema();
+
+  if (!restoreWorkspace()) loadDefaultSchema();
+  setupWorkspaceAutosave();
 }
 
 window.addEventListener('load', init);

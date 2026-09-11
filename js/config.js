@@ -60,6 +60,11 @@ const APP_CONFIG = Object.freeze({
     curveY: 0.2,
   }),
 
+  // 自動保存 (localStorage) の上限。SQL 本文がこれを超える場合は保存しない
+  persistence: Object.freeze({
+    maxSnapshotBytes: 1024 * 1024,
+  }),
+
   // Tailwind CDN のスタイル適用を待つための描画ディレイ (ms)
   timing: Object.freeze({
     toggleRenderMs: 50,
@@ -69,5 +74,7 @@ const APP_CONFIG = Object.freeze({
     viewAnimationMs: 300,
     // トースト通知の表示時間
     toastMs: 2600,
+    // 状態変更から自動保存までの待ち時間 (ドラッグ中の連続更新をまとめる)
+    autosaveDebounceMs: 400,
   }),
 });
