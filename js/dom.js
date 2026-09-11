@@ -24,6 +24,10 @@ const dom = Object.freeze({
   btnFit: byId('btn-fit'),
   zoomLabel: byId('zoom-label'),
   btnExportJson: byId('btn-export-json'),
+  btnExportMermaid: byId('btn-export-mermaid'),
+
+  // 通知
+  toastContainer: byId('toast-container'),
 
   // 凡例
   shortcutHints: byId('shortcut-hints'),
