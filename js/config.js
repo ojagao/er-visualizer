@@ -34,6 +34,8 @@ const APP_CONFIG = Object.freeze({
     pageDeltaPx: 400,
     // +/- ボタン 1 回あたりの倍率
     buttonStep: 1.1,
+    // テーブルへジャンプするとき、これより小さい倍率なら読みやすい倍率までズームイン
+    focusMinScale: 0.9,
     fitMin: 0.2,
     fitMax: 1.05,
     fitPadding: 80,
@@ -63,5 +65,7 @@ const APP_CONFIG = Object.freeze({
     toggleRenderMs: 50,
     parseRenderMs: 80,
     initialRenderMs: 150,
+    // プログラムによるビュー移動 (全体表示 / テーブルへジャンプ) のアニメーション時間
+    viewAnimationMs: 300,
   }),
 });

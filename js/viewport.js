@@ -47,6 +47,34 @@ function getDiagramBounds() {
   };
 }
 
+/** ビューの変更をアニメーション付きで反映 (ホイール / ドラッグ操作では使わない) */
+function animateViewTo(viewPatch) {
+  const { viewAnimationMs } = APP_CONFIG.timing;
+  dom.viewport.style.transition = `transform ${viewAnimationMs}ms ease`;
+  setView(viewPatch);
+  updateTransform();
+  window.setTimeout(() => {
+    dom.viewport.style.transition = '';
+  }, viewAnimationMs);
+}
+
+/** 指定テーブルが画面中央に来るよう移動 (小さすぎる倍率なら読みやすい倍率まで拡大) */
+function centerOnTable(tableId) {
+  const { positions, view } = appState.get();
+  const box = getCardBox(tableId, positions);
+  if (!box) return;
+
+  const scale = Math.max(view.scale, APP_CONFIG.zoom.focusMinScale);
+  const centerX = box.x + box.width / 2;
+  const centerY = box.y + box.height / 2;
+
+  animateViewTo({
+    scale,
+    translateX: dom.workspace.clientWidth / 2 - centerX * scale,
+    translateY: dom.workspace.clientHeight / 2 - centerY * scale,
+  });
+}
+
 /** ダイアグラム全体が画面に収まるようズーム・パンを調整 */
 function fitToScreen() {
   const bounds = getDiagramBounds();
@@ -61,12 +89,11 @@ function fitToScreen() {
   const rawScale = Math.min((width - fitPadding) / diagramWidth, (height - fitPadding) / diagramHeight);
   const scale = Math.min(Math.max(fitMin, rawScale), fitMax);
 
-  setView({
+  animateViewTo({
     scale,
     translateX: (width - diagramWidth * scale) / 2 - bounds.minX * scale,
     translateY: (height - diagramHeight * scale) / 2 - bounds.minY * scale,
   });
-  updateTransform();
 }
 
 /** 背景ドラッグによるパン */

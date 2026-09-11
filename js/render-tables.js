@@ -9,6 +9,7 @@ const CARD_BASE_CLASS =
 const CARD_STATE_CLASS = Object.freeze({
   selected: 'border-indigo-400 ring-4 ring-indigo-500/30 shadow-indigo-500/20 z-30',
   active: 'border-slate-700 hover:border-slate-500 z-10',
+  match: 'border-indigo-500/70 hover:border-indigo-400 shadow-indigo-500/10 z-20',
   dimmed: 'border-slate-800 opacity-20 z-0',
 });
 
@@ -20,7 +21,8 @@ function resolveCardStateClass(table, state) {
     !state.selectedTableId || isTableRelated(state.schema.relations, table.id, state.selectedTableId);
   const matched = tableMatchesSearch(table, state.searchQuery);
 
-  return related && matched ? CARD_STATE_CLASS.active : CARD_STATE_CLASS.dimmed;
+  if (!related || !matched) return CARD_STATE_CLASS.dimmed;
+  return state.searchQuery ? CARD_STATE_CLASS.match : CARD_STATE_CLASS.active;
 }
 
 function createTableCard(table, state) {

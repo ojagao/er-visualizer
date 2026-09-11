@@ -16,6 +16,7 @@ const dom = Object.freeze({
   btnAutoLayout: byId('btn-auto-layout'),
   searchInput: byId('search-input'),
   searchClear: byId('search-clear'),
+  searchCount: byId('search-count'),
   toggleColumnsBtn: byId('toggle-columns-btn'),
   columnsModeText: byId('columns-mode-text'),
   btnZoomIn: byId('btn-zoom-in'),
