@@ -34,6 +34,7 @@
       <!-- スキーマ入力モーダルを開くボタン -->
       <button
         id="btn-open-schema-modal"
+        title="SQL スキーマを入力"
         class="px-3 py-1.5 text-xs font-semibold bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white rounded-lg shadow-sm shadow-indigo-600/30 transition flex items-center gap-1.5 border border-indigo-400/30">
         <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
         <span>スキーマ入力 (SQL)</span>
@@ -134,6 +135,7 @@
       <div class="text-[11px] text-slate-400 border-t border-slate-800 pt-1.5">
         <span>背景ドラッグ: 移動 / ホイール: ズーム / テーブルドラッグ: 配置変更 / クリック: 関連強調</span>
       </div>
+      <div id="shortcut-hints" class="text-[10px] text-slate-500 font-mono leading-relaxed" title="キーボードショートカット"></div>
     </div>
   </main>
 
@@ -217,6 +219,7 @@
   <script src="js/diagram.js"></script>
   <script src="js/viewport.js"></script>
   <script src="js/schema-modal.js"></script>
+  <script src="js/keyboard-shortcuts.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
