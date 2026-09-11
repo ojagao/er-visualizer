@@ -69,9 +69,26 @@ const APP_CONFIG = Object.freeze({
 
   // 接続線の形状
   connection: Object.freeze({
+    // 中心の横ずれがこれ以下なら上下の辺、超えれば左右の辺から線を出す
     sideThresholdPx: 80,
-    curveX: 0.5,
-    curveY: 0.2,
+    // ベジェのハンドル長 (端点間距離に対する比率と最小値)。辺に垂直に出入りする
+    handleRatio: 0.4,
+    handleMinPx: 40,
+    // 同じ辺に複数の線が集まるときの端点の間隔と、辺の端に残す余白
+    anchorSpacingPx: 30,
+    anchorEdgeMarginPx: 24,
+    // 自己参照ループ: 右辺の高さ何割分を使うか / ハンドル長
+    selfLoopSpan: 0.3,
+    selfLoopHandlePx: 70,
+    // クロウズフット記法の寸法 (px)
+    notation: Object.freeze({
+      barOffset: 12, // 「1」の縦棒: 辺からの距離
+      barHalfLength: 7, // 縦棒の半分の長さ
+      footLength: 16, // 三叉 (多) の奥行き
+      footHalfWidth: 8, // 三叉の開き (半分)
+      circleRadius: 4.5, // 「0」の丸
+      circleGap: 3, // 記号と丸の隙間
+    }),
   }),
 
   // 自動保存 (localStorage) の上限。SQL 本文がこれを超える場合は保存しない

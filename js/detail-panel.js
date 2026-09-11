@@ -15,6 +15,7 @@ const DETAIL_BADGE_CLASS = Object.freeze({
 /** パネル表示用にテーブルの情報を整理する (純粋関数) */
 function buildTableDetail(table, schema) {
   const tableIds = new Set(schema.tables.map((t) => t.id));
+  const tablesById = new Map(schema.tables.map((t) => [t.id, t]));
   const outgoingRelations = schema.relations.filter((rel) => rel.from === table.id);
 
   const columns = table.columns.map((col) => {
@@ -39,6 +40,7 @@ function buildTableDetail(table, schema) {
     targetColumn: rel.toCol,
     inferred: Boolean(rel.inferred),
     exists: tableIds.has(rel.to),
+    cardinality: resolveCardinality(rel, tablesById).type,
   }));
 
   const incoming = schema.relations
@@ -49,6 +51,7 @@ function buildTableDetail(table, schema) {
       targetColumn: rel.toCol,
       inferred: Boolean(rel.inferred),
       exists: tableIds.has(rel.from),
+      cardinality: resolveCardinality(rel, tablesById).type,
     }));
 
   return {
@@ -58,6 +61,7 @@ function buildTableDetail(table, schema) {
     columns,
     outgoing,
     incoming,
+    junctionTargets: getJunctionTargets(table, schema.relations),
     stats: {
       columns: columns.length,
       primaryKeys: columns.filter((c) => c.pk).length,
@@ -127,7 +131,10 @@ function renderRelationItem(rel, direction) {
         ${via}
         ${renderRevealButton(rel.tableId, label, rel.exists)}
       </span>
-      ${rel.inferred ? renderDetailBadge('inferred', '推測') : ''}
+      <span class="flex items-center gap-1 shrink-0">
+        ${rel.inferred ? renderDetailBadge('inferred', '推測') : ''}
+        <span class="font-mono text-[10px] text-slate-400" title="カーディナリティ">${escapeHtml(rel.cardinality)}</span>
+      </span>
     </li>`;
 }
 
@@ -158,6 +165,7 @@ function renderDetailPanelHtml(detail) {
           <span class="px-2 py-0.5 text-[10px] font-semibold rounded border uppercase tracking-wider ${style.badge}">${escapeHtml(detail.category)}</span>
           <span class="text-[11px] text-slate-400 font-mono">${stats.columns} cols · PK ${stats.primaryKeys} · FK ${stats.foreignKeys} · NOT NULL ${stats.notNull}</span>
         </div>
+        ${detail.junctionTargets.length ? `<p class="mt-1.5 text-[11px] text-slate-300"><span class="px-1 py-px text-[9px] font-bold rounded border bg-slate-700/60 text-slate-200 border-slate-500/50 mr-1.5">N:N</span>${detail.junctionTargets.map(escapeHtml).join(' ⇄ ')} の多対多を表す中間テーブル</p>` : ''}
       </div>
       <button type="button" data-close-panel title="閉じる (選択解除)" class="p-1.5 -mr-1.5 -mt-1 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition shrink-0">✕</button>
     </header>

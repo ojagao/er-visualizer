@@ -23,9 +23,49 @@
   overflow: visible;
 }
 
-/* リレーション線のトランジション */
-.relation-path {
-  transition: stroke 0.2s ease, stroke-width 0.2s ease, opacity 0.2s ease;
+/* リレーション線: 種類による色分けはせず 1 色。両端の記号 (クロウズフット) で 1 / 0..1 / 多 を表す */
+.relation {
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
+}
+
+.relation-path,
+.relation-end {
+  fill: none;
+  stroke: #94a3b8;
+  stroke-width: 1.6px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: stroke 0.2s ease, stroke-width 0.2s ease;
+}
+
+/* 「0」の丸は背景色で塗り、線が丸の中を通らないようにする */
+.relation-end-circle {
+  fill: #0b0f19;
+  stroke: #94a3b8;
+  stroke-width: 1.6px;
+  transition: stroke 0.2s ease, stroke-width 0.2s ease;
+}
+
+/* 命名規則から推測したリレーションは点線 (記号は実線のまま) */
+.relation.is-inferred .relation-path {
+  stroke-dasharray: 5 3;
+}
+
+/* 選択テーブルに関係する線を強調、それ以外は薄く */
+.relation.is-highlight {
+  opacity: 1;
+}
+
+.relation.is-highlight .relation-path,
+.relation.is-highlight .relation-end,
+.relation.is-highlight .relation-end-circle {
+  stroke: #38bdf8;
+  stroke-width: 2.4px;
+}
+
+.relation.is-dimmed {
+  opacity: 0.12;
 }
 
 /* モーダル背景 */

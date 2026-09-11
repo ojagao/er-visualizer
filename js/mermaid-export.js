@@ -33,10 +33,12 @@ function toMermaidEntity(table) {
   return [`    ${toMermaidIdentifier(table.name)} {`, ...attributes, '    }'].join('\n');
 }
 
+// 親側 (左) と子側 (右) の記号。判定は cardinality.js と共通
+const MERMAID_PARENT_END = Object.freeze({ [CARDINALITY_END.ONE]: '||', [CARDINALITY_END.ZERO_OR_ONE]: '|o' });
+const MERMAID_CHILD_END = Object.freeze({ [CARDINALITY_END.ZERO_OR_ONE]: 'o|', [CARDINALITY_END.ZERO_OR_MANY]: 'o{' });
+
 /**
  * リレーション行を生成 (参照先が存在しないものは省く)
- * - 親側: FK 列が NULL 許容なら |o (0 or 1)、そうでなければ || (exactly 1)
- * - 子側: FK 列が単独 PK または UNIQUE なら || (1:1)、それ以外は o{ (0 or many)
  * - 推測リレーションは点線 (..) にし、ラベルに (inferred) を付ける
  */
 function toMermaidRelation(rel, tablesById) {
@@ -44,17 +46,11 @@ function toMermaidRelation(rel, tablesById) {
   const parent = tablesById.get(rel.to);
   if (!child || !parent) return null;
 
-  const fkColumn = child.columns.find((c) => c.name.toLowerCase() === rel.fromCol.toLowerCase());
-  const childPkCount = child.columns.filter((c) => c.pk).length;
-  const nullable = Boolean(fkColumn) && !fkColumn.notNull && !fkColumn.pk;
-  const oneToOne = Boolean(fkColumn) && (fkColumn.unique || (fkColumn.pk && childPkCount === 1));
-
-  const parentSide = nullable ? '|o' : '||';
-  const childSide = oneToOne ? '||' : 'o{';
+  const { parentEnd, childEnd } = resolveCardinality(rel, tablesById);
   const line = rel.inferred ? '..' : '--';
   const label = rel.inferred ? `${rel.fromCol} (inferred)` : rel.fromCol;
 
-  return `    ${toMermaidIdentifier(parent.name)} ${parentSide}${line}${childSide} ${toMermaidIdentifier(child.name)} : "${label}"`;
+  return `    ${toMermaidIdentifier(parent.name)} ${MERMAID_PARENT_END[parentEnd]}${line}${MERMAID_CHILD_END[childEnd]} ${toMermaidIdentifier(child.name)} : "${label}"`;
 }
 
 /** スキーマ全体を Mermaid erDiagram テキストに変換 */

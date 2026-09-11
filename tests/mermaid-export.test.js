@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const { loadScripts } = require('./load-scripts');
 
 const { toMermaidErDiagram, toMermaidType, toMermaidIdentifier, UniversalDDLParser, SCHEMA_PRESETS } = loadScripts(
-  ['config.js', 'presets.js', 'ddl-parser.js', 'mermaid-export.js'],
+  ['config.js', 'presets.js', 'cardinality.js', 'ddl-parser.js', 'mermaid-export.js'],
   ['toMermaidErDiagram', 'toMermaidType', 'toMermaidIdentifier', 'UniversalDDLParser', 'SCHEMA_PRESETS'],
 );
 
@@ -46,8 +46,8 @@ describe('toMermaidErDiagram: EC プリセット', () => {
     assert.ok(out.includes('categories |o--o{ categories : "parent_id"'));
   });
 
-  test('単独 PK が FK のテーブルは 1 対 1 (||--||)', () => {
-    assert.ok(out.includes('users ||--|| user_profiles : "user_id"'));
+  test('単独 PK が FK のテーブルは 1 対 1 (||--o|)', () => {
+    assert.ok(out.includes('users ||--o| user_profiles : "user_id"'));
   });
 });
 
@@ -56,7 +56,7 @@ describe('toMermaidErDiagram: 推測リレーションと参照先不明', () =>
     const schema = UniversalDDLParser.parse(SCHEMA_PRESETS.blog);
     const out = lines(toMermaidErDiagram(schema));
     assert.ok(out.includes('users |o..o{ comments : "user_id (inferred)"'));
-    assert.ok(out.includes('users ||..|| profiles : "user_id (inferred)"'));
+    assert.ok(out.includes('users ||..o| profiles : "user_id (inferred)"'));
     assert.ok(out.includes('users ||--o{ posts : "author_id"'));
   });
 
