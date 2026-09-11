@@ -12,6 +12,7 @@ function applySearch(rawValue) {
   const searchQuery = rawValue.toLowerCase().trim();
   appState.update({ searchQuery });
   dom.searchClear.classList.toggle('hidden', !searchQuery);
+  renderSearchCount();
   renderDiagram();
 }
 
@@ -75,6 +76,7 @@ function init() {
   setupSchemaModal();
   setupToolbar();
   setupKeyboardShortcuts();
+  setupSearchNavigation();
   window.addEventListener('resize', renderConnections);
   loadDefaultSchema();
 }
