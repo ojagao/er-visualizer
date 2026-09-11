@@ -10,6 +10,8 @@ const dom = Object.freeze({
   tablesContainer: byId('tables-container'),
   relationsGroup: byId('relations-group'),
 
+  detailPanel: byId('detail-panel'),
+
   // ヘッダーツールバー
   tableCountBadge: byId('table-count-badge'),
   btnOpenSchemaModal: byId('btn-open-schema-modal'),
