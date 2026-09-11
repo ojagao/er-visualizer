@@ -7,28 +7,34 @@ const COLUMNS_MODE_LABEL = Object.freeze({
   keysOnly: '全カラム表示',
 });
 
-function setupSearch() {
-  const applySearch = (rawValue) => {
-    const searchQuery = rawValue.toLowerCase().trim();
-    appState.update({ searchQuery });
-    dom.searchClear.classList.toggle('hidden', !searchQuery);
-    renderDiagram();
-  };
+/** 検索語を適用してダイアグラムを再描画 */
+function applySearch(rawValue) {
+  const searchQuery = rawValue.toLowerCase().trim();
+  appState.update({ searchQuery });
+  dom.searchClear.classList.toggle('hidden', !searchQuery);
+  renderDiagram();
+}
 
+function clearSearch() {
+  dom.searchInput.value = '';
+  applySearch('');
+}
+
+function setupSearch() {
   dom.searchInput.addEventListener('input', (event) => applySearch(event.target.value));
-  dom.searchClear.addEventListener('click', () => {
-    dom.searchInput.value = '';
-    applySearch('');
-  });
+  dom.searchClear.addEventListener('click', clearSearch);
+}
+
+/** 主要列のみ / 全カラム 表示を切り替える */
+function toggleColumnsMode() {
+  const { showOnlyKeys } = appState.update((state) => ({ showOnlyKeys: !state.showOnlyKeys }));
+  dom.columnsModeText.textContent = showOnlyKeys ? COLUMNS_MODE_LABEL.keysOnly : COLUMNS_MODE_LABEL.all;
+  renderTables();
+  window.setTimeout(renderConnections, APP_CONFIG.timing.toggleRenderMs);
 }
 
 function setupColumnsToggle() {
-  dom.toggleColumnsBtn.addEventListener('click', () => {
-    const { showOnlyKeys } = appState.update((state) => ({ showOnlyKeys: !state.showOnlyKeys }));
-    dom.columnsModeText.textContent = showOnlyKeys ? COLUMNS_MODE_LABEL.keysOnly : COLUMNS_MODE_LABEL.all;
-    renderTables();
-    window.setTimeout(renderConnections, APP_CONFIG.timing.toggleRenderMs);
-  });
+  dom.toggleColumnsBtn.addEventListener('click', toggleColumnsMode);
 }
 
 /** 現在のスキーマ・座標を JSON ファイルとしてダウンロード */
@@ -68,6 +74,7 @@ function init() {
   setupViewportInteractions();
   setupSchemaModal();
   setupToolbar();
+  setupKeyboardShortcuts();
   window.addEventListener('resize', renderConnections);
   loadDefaultSchema();
 }

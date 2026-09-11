@@ -24,6 +24,9 @@ const dom = Object.freeze({
   zoomLabel: byId('zoom-label'),
   btnExportJson: byId('btn-export-json'),
 
+  // 凡例
+  shortcutHints: byId('shortcut-hints'),
+
   // スキーマ入力モーダル
   schemaModal: byId('schema-modal'),
   btnCloseModal: byId('btn-close-modal'),
