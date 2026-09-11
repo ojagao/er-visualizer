@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const { loadScripts, plain } = require('./load-scripts');
 
 const { buildTableDetail, renderDetailPanelHtml, UniversalDDLParser, SCHEMA_PRESETS } = loadScripts(
-  ['config.js', 'presets.js', 'ddl-parser.js', 'utils.js', 'card-template.js', 'detail-panel.js'],
+  ['config.js', 'presets.js', 'cardinality.js', 'ddl-parser.js', 'utils.js', 'card-template.js', 'detail-panel.js'],
   ['buildTableDetail', 'renderDetailPanelHtml', 'UniversalDDLParser', 'SCHEMA_PRESETS'],
 );
 
