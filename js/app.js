@@ -41,6 +41,11 @@ function setupColumnsToggle() {
 /** 現在のスキーマ・座標を JSON ファイルとしてダウンロード */
 function exportSchemaJson() {
   const { schema, positions } = appState.get();
+  if (!schema.tables.length) {
+    showToast('エクスポートするテーブルがありません', 'error');
+    return;
+  }
+
   const payload = {
     exportedAt: new Date().toISOString(),
     tables: schema.tables,
@@ -48,18 +53,14 @@ function exportSchemaJson() {
     positions,
   };
 
-  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement('a');
-  anchor.href = url;
-  anchor.download = `schema-er-diagram-${Date.now()}.json`;
-  anchor.click();
-  URL.revokeObjectURL(url);
+  downloadTextFile(JSON.stringify(payload, null, 2), `schema-er-diagram-${Date.now()}.json`, 'application/json');
+  showToast(`JSON をダウンロードしました (${schema.tables.length} テーブル)`, 'success');
 }
 
 function setupToolbar() {
   dom.btnAutoLayout.addEventListener('click', runAutoLayout);
   dom.btnExportJson.addEventListener('click', exportSchemaJson);
+  dom.btnExportMermaid.addEventListener('click', copyMermaidToClipboard);
   setupSearch();
   setupColumnsToggle();
 }

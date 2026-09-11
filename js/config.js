@@ -67,5 +67,7 @@ const APP_CONFIG = Object.freeze({
     initialRenderMs: 150,
     // プログラムによるビュー移動 (全体表示 / テーブルへジャンプ) のアニメーション時間
     viewAnimationMs: 300,
+    // トースト通知の表示時間
+    toastMs: 2600,
   }),
 });
