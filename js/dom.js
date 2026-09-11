@@ -25,6 +25,7 @@ const dom = Object.freeze({
   btnZoomOut: byId('btn-zoom-out'),
   btnFit: byId('btn-fit'),
   zoomLabel: byId('zoom-label'),
+  zoomSensitivity: byId('zoom-sensitivity'),
   btnExportJson: byId('btn-export-json'),
   btnExportMermaid: byId('btn-export-mermaid'),
 

@@ -150,8 +150,8 @@ function normalizeWheelDelta(event) {
  * deltaY の大きさに比例させ (小刻みなトラックパッド入力でも滑らか)、
  * 1 イベントあたりの倍率は wheelMaxFactor で頭打ちにする
  */
-function wheelZoomFactor(event) {
-  const { wheelSensitivity, wheelMaxFactor } = APP_CONFIG.zoom;
+function wheelZoomFactor(event, wheelSensitivity = APP_CONFIG.zoom.wheelSensitivity) {
+  const { wheelMaxFactor } = APP_CONFIG.zoom;
   const raw = Math.exp(-normalizeWheelDelta(event) * wheelSensitivity);
   return Math.min(Math.max(1 / wheelMaxFactor, raw), wheelMaxFactor);
 }
@@ -165,7 +165,7 @@ function setupWheelZoom() {
       event.preventDefault();
       const rect = dom.workspace.getBoundingClientRect();
       zoomAt(
-        appState.get().view.scale * wheelZoomFactor(event),
+        appState.get().view.scale * wheelZoomFactor(event, getZoomLevel().wheelSensitivity),
         event.clientX - rect.left,
         event.clientY - rect.top,
       );
@@ -175,9 +175,8 @@ function setupWheelZoom() {
 }
 
 function setupZoomButtons() {
-  const { buttonStep } = APP_CONFIG.zoom;
-  dom.btnZoomIn.addEventListener('click', () => zoomByFactor(buttonStep));
-  dom.btnZoomOut.addEventListener('click', () => zoomByFactor(1 / buttonStep));
+  dom.btnZoomIn.addEventListener('click', () => zoomByFactor(getZoomLevel().buttonStep));
+  dom.btnZoomOut.addEventListener('click', () => zoomByFactor(1 / getZoomLevel().buttonStep));
   dom.btnFit.addEventListener('click', fitToScreen);
 }
 

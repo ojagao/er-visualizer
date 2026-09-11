@@ -12,6 +12,8 @@ const createInitialState = () => ({
   selectedTableId: null,
   searchQuery: '',
   showOnlyKeys: false,
+  // ユーザー設定 (作業状態とは別に保存)
+  preferences: { zoomSensitivity: APP_CONFIG.zoom.defaultSensitivityId },
 });
 
 const appState = (() => {

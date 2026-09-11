@@ -15,10 +15,17 @@ const wheel = (deltaY, deltaMode = WHEEL_EVENT_STUB.DOM_DELTA_PIXEL) => ({ delta
 const nearlyEqual = (a, b) => Math.abs(a - b) < 1e-9;
 
 describe('wheelZoomFactor (ホイールズーム感度)', () => {
-  test('マウス 1 ノッチ (deltaY=100) の縮小率は 10% 未満に抑える', () => {
+  test('マウス 1 ノッチ (deltaY=100) の既定の縮小率は 8〜20% の範囲', () => {
     const factor = wheelZoomFactor(wheel(100));
     assert.ok(factor < 1, '下方向スクロールは縮小');
-    assert.ok(factor > 0.9, `1 ノッチで ${(1 - factor) * 100}% は大きすぎる`);
+    const percent = (1 - factor) * 100;
+    assert.ok(percent > 8 && percent < 20, `1 ノッチで ${percent.toFixed(1)}% は範囲外`);
+  });
+
+  test('感度を渡すと倍率が変わり、軽いほど大きく動く', () => {
+    const levels = APP_CONFIG.zoom.sensitivityLevels.map((l) => wheelZoomFactor(wheel(-100), l.wheelSensitivity));
+    levels.slice(1).forEach((f, i) => assert.ok(levels[i] > f, `${i} 番目のレベルは次より軽いはず`));
+    assert.ok(levels.every((f) => f > 1 && f <= APP_CONFIG.zoom.wheelMaxFactor));
   });
 
   test('上方向は拡大・下方向は縮小で、互いに逆数になる', () => {

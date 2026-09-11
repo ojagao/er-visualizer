@@ -10,8 +10,8 @@ const EDITABLE_TAGS = new Set(['INPUT', 'TEXTAREA', 'SELECT']);
 
 // run は呼び出し時に解決させるため、必ずアロー関数で包む (読み込み順に依存しない)
 const KEYBOARD_SHORTCUTS = Object.freeze([
-  { id: 'zoom-in', keys: ['+', '='], hint: '+', description: 'ズームイン', run: () => zoomByFactor(APP_CONFIG.zoom.buttonStep) },
-  { id: 'zoom-out', keys: ['-', '_'], hint: '−', description: 'ズームアウト', run: () => zoomByFactor(1 / APP_CONFIG.zoom.buttonStep) },
+  { id: 'zoom-in', keys: ['+', '='], hint: '+', description: 'ズームイン', run: () => zoomByFactor(getZoomLevel().buttonStep) },
+  { id: 'zoom-out', keys: ['-', '_'], hint: '−', description: 'ズームアウト', run: () => zoomByFactor(1 / getZoomLevel().buttonStep) },
   { id: 'fit', keys: ['0'], hint: '0', description: '全体表示', run: () => fitToScreen() },
   { id: 'auto-layout', keys: ['a', 'A'], hint: 'A', description: '自動整列', run: () => runAutoLayout() },
   { id: 'toggle-columns', keys: ['k', 'K'], hint: 'K', description: '主要列のみ / 全カラム', run: () => toggleColumnsMode() },

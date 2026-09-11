@@ -100,6 +100,7 @@ function restoreWorkspace() {
 }
 
 function init() {
+  setupZoomSettings();
   setupViewportInteractions();
   setupSchemaModal();
   setupToolbar();
