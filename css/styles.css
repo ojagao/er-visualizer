@@ -23,6 +23,23 @@
   transition: stroke 0.2s ease, stroke-width 0.2s ease, opacity 0.2s ease;
 }
 
+/* 接続線のホバー判定用の太い透明パス (SVG レイヤー自体は pointer-events: none) */
+.relation-hit {
+  stroke: transparent;
+  stroke-width: 14px;
+  pointer-events: stroke;
+  cursor: help;
+}
+
+/* 線にホバー / 関連カードにホバー: 選択時と同じ強調色で表示 */
+.relation:hover .relation-path,
+.relation.is-hover .relation-path {
+  stroke: #38bdf8;
+  stroke-width: 3px;
+  opacity: 1;
+  marker-end: url(#marker-arrow-highlight);
+}
+
 /* モーダル背景 */
 .modal-backdrop {
   background: rgba(3, 7, 18, 0.75);

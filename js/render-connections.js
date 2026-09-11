@@ -92,30 +92,61 @@ function resolveRelationAttributes(rel, selectedTableId) {
   };
 }
 
-function createRelationPath(rel, state) {
+/** ツールチップ用の説明文 (例: posts.author_id → users.id) */
+function describeRelation(rel) {
+  const suffix = rel.inferred ? ' (命名規則から推測)' : '';
+  return `${rel.from}.${rel.fromCol} → ${rel.to}.${rel.toCol}${suffix}`;
+}
+
+function createSvgElement(tagName, attributes) {
+  const element = document.createElementNS(SVG_NS, tagName);
+  Object.entries(attributes).forEach(([key, value]) => element.setAttribute(key, value));
+  return element;
+}
+
+/**
+ * 1 本のリレーションを <g class="relation"> として生成
+ * - .relation-hit: 太い透明パス (ホバー判定用)
+ * - .relation-path: 実際に描画される線
+ * - <title>: ネイティブツールチップ
+ */
+function createRelationGroup(rel, state) {
   const boxA = getCardBox(rel.from, state.positions);
   const boxB = getCardBox(rel.to, state.positions);
   if (!boxA || !boxB) return null;
 
   const { start, end } = computeAnchors(boxA, boxB);
-  const attributes = {
-    d: buildCurvePath(start, end),
+  const d = buildCurvePath(start, end);
+
+  const group = createSvgElement('g', {
+    class: 'relation',
+    'data-from': rel.from,
+    'data-to': rel.to,
+    'data-inferred': String(Boolean(rel.inferred)),
+  });
+
+  const title = document.createElementNS(SVG_NS, 'title');
+  title.textContent = describeRelation(rel);
+
+  const hitPath = createSvgElement('path', { d, fill: 'none', class: 'relation-hit' });
+  const visiblePath = createSvgElement('path', {
+    d,
     fill: 'none',
     class: 'relation-path',
     ...resolveRelationAttributes(rel, state.selectedTableId),
-  };
+  });
 
-  const path = document.createElementNS(SVG_NS, 'path');
-  Object.entries(attributes).forEach(([key, value]) => path.setAttribute(key, value));
-  return path;
+  group.append(title, hitPath, visiblePath);
+  return group;
 }
 
 /** 全リレーション線を再描画 */
 function renderConnections() {
   const state = appState.get();
-  const paths = state.schema.relations
-    .map((rel) => createRelationPath(rel, state))
+  const groups = state.schema.relations
+    .map((rel) => createRelationGroup(rel, state))
     .filter(Boolean);
 
-  dom.relationsGroup.replaceChildren(...paths);
+  dom.relationsGroup.replaceChildren(...groups);
+  applyHoverHighlight();
 }

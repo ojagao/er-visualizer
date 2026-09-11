@@ -42,6 +42,7 @@ function createTableCard(table, state) {
   });
 
   setupCardDrag(card, table.id, renderConnections);
+  setupCardHover(card, table.id);
 
   card.addEventListener('click', () => {
     if (card.dataset.dragged === 'true') return;
