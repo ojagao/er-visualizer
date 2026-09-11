@@ -40,6 +40,7 @@ const dom = Object.freeze({
   presetBlog: byId('preset-blog'),
   presetEcommerce: byId('preset-ecommerce'),
   presetClear: byId('preset-clear'),
+  presetReset: byId('preset-reset'),
   sqlInput: byId('sql-input'),
   sqlStats: byId('sql-stats'),
   optInferFk: byId('opt-infer-fk'),

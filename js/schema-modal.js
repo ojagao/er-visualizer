@@ -45,7 +45,8 @@ function handleParseAndRender() {
   }
 
   try {
-    const parsed = UniversalDDLParser.parse(rawSql, { inferFk: dom.optInferFk.checked });
+    const inferFk = dom.optInferFk.checked;
+    const parsed = UniversalDDLParser.parse(rawSql, { inferFk });
 
     if (!parsed.tables.length) {
       setParseStatus('CREATE TABLE 文が見つかりませんでした。', 'warn');
@@ -53,7 +54,7 @@ function handleParseAndRender() {
     }
 
     setParseStatus(`${parsed.tables.length} テーブル / ${parsed.relations.length} リレーションを検出`, 'success');
-    applyParsedSchema(parsed, APP_CONFIG.timing.parseRenderMs);
+    applyParsedSchema(parsed, APP_CONFIG.timing.parseRenderMs, { source: { sql: rawSql, inferFk } });
     closeSchemaModal();
   } catch (error) {
     console.error('DDL parse failed:', error);
@@ -75,6 +76,11 @@ function setupSchemaModal() {
   dom.presetBlog.addEventListener('click', () => setSqlInput(SCHEMA_PRESETS.blog));
   dom.presetEcommerce.addEventListener('click', () => setSqlInput(SCHEMA_PRESETS.ecommerce));
   dom.presetClear.addEventListener('click', () => setSqlInput(''));
+  dom.presetReset.addEventListener('click', () => {
+    clearWorkspace();
+    loadDefaultSchema();
+    closeSchemaModal();
+  });
 
   dom.sqlInput.addEventListener('input', updateSqlStats);
   dom.btnParseAndRender.addEventListener('click', handleParseAndRender);

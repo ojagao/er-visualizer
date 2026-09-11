@@ -27,12 +27,33 @@ function arrangeTables() {
   return DiagramAutoLayout.arrange(schema.tables, schema.relations, estimateCurrentCardHeight);
 }
 
-/** パース結果を状態へ反映し、自動レイアウトして描画 */
-function applyParsedSchema(parsed, delayMs) {
-  appState.update({ schema: parsed, selectedTableId: null });
-  appState.update({ positions: arrangeTables() });
+/**
+ * パース結果を状態へ反映して描画
+ * @param {object} parsed パース結果 { tables, relations }
+ * @param {number} delayMs 接続線描画 / 全体表示までの待ち時間
+ * @param {{source?: {sql: string, inferFk: boolean}|null, positions?: object|null, view?: object|null}} [options]
+ *   positions / view を渡すと自動レイアウト・全体表示の代わりにそれを復元する
+ */
+function applyParsedSchema(parsed, delayMs, options = {}) {
+  const { source = null, positions = null, view = null } = options;
+
+  appState.update({ schema: parsed, source, selectedTableId: null });
+  appState.update((state) => ({
+    positions: positions ? mergePositions(arrangeTables(), positions, state.schema.tables) : arrangeTables(),
+  }));
+
+  if (view) {
+    setView(view);
+    updateTransform();
+  }
+
   renderTables();
-  scheduleFitAndConnections(delayMs);
+
+  if (view) {
+    window.setTimeout(renderConnections, delayMs);
+  } else {
+    scheduleFitAndConnections(delayMs);
+  }
 }
 
 /** 自動整列ボタン */
