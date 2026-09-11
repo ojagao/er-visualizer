@@ -30,6 +30,7 @@ function setupSearch() {
 function applyColumnsMode(showOnlyKeys) {
   appState.update({ showOnlyKeys });
   dom.columnsModeText.textContent = showOnlyKeys ? COLUMNS_MODE_LABEL.keysOnly : COLUMNS_MODE_LABEL.all;
+  dom.toggleColumnsBtn.setAttribute('aria-pressed', String(showOnlyKeys));
 }
 
 /** 主要列のみ / 全カラム 表示を切り替える (ボタンとキーボードショートカットから呼ばれる) */
