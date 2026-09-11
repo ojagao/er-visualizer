@@ -65,6 +65,11 @@ const APP_CONFIG = Object.freeze({
     maxSnapshotBytes: 1024 * 1024,
   }),
 
+  // ファイル読み込みの上限
+  fileImport: Object.freeze({
+    maxFileBytes: 5 * 1024 * 1024,
+  }),
+
   // Tailwind CDN のスタイル適用を待つための描画ディレイ (ms)
   timing: Object.freeze({
     toggleRenderMs: 50,

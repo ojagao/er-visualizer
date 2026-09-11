@@ -104,6 +104,7 @@ function init() {
   setupToolbar();
   setupKeyboardShortcuts();
   setupSearchNavigation();
+  setupFileImport();
   window.addEventListener('resize', renderConnections);
 
   if (!restoreWorkspace()) loadDefaultSchema();

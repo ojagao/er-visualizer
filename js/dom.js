@@ -41,8 +41,13 @@ const dom = Object.freeze({
   presetEcommerce: byId('preset-ecommerce'),
   presetClear: byId('preset-clear'),
   presetReset: byId('preset-reset'),
+  btnOpenFile: byId('btn-open-file'),
+  fileInput: byId('file-input'),
   sqlInput: byId('sql-input'),
   sqlStats: byId('sql-stats'),
   optInferFk: byId('opt-infer-fk'),
   parseStatusMsg: byId('parse-status-msg'),
+
+  // ファイルドロップ
+  dropOverlay: byId('drop-overlay'),
 });
