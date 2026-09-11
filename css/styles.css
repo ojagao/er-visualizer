@@ -18,6 +18,11 @@
   cursor: grabbing;
 }
 
+/* 接続線レイヤー: 外側 SVG は既定で内容をクリップするため、5000px の領域外や負座標に置いたテーブルへの線も描けるようにする */
+#connections-svg {
+  overflow: visible;
+}
+
 /* リレーション線のトランジション */
 .relation-path {
   transition: stroke 0.2s ease, stroke-width 0.2s ease, opacity 0.2s ease;
