@@ -87,6 +87,12 @@
         <button type="button" id="btn-fit" title="画面全体に収める" class="px-2 py-1 text-xs font-medium hover:bg-slate-700 rounded text-slate-200 transition">
           全体表示
         </button>
+        <div class="w-px h-4 bg-slate-700 mx-0.5"></div>
+        <select
+          id="zoom-sensitivity"
+          title="ホイール / ボタンのズーム感度 (選択はこのブラウザに保存されます)"
+          aria-label="ズーム感度"
+          class="bg-transparent text-xs text-slate-300 hover:bg-slate-700 hover:text-white rounded px-1.5 py-1 cursor-pointer focus:outline-none focus:ring-1 focus:ring-indigo-500 transition"></select>
       </div>
 
       <!-- エクスポート (Mermaid コピー / JSON 保存) -->
@@ -267,6 +273,7 @@
   <script src="js/render-tables.js"></script>
   <script src="js/render-connections.js"></script>
   <script src="js/diagram.js"></script>
+  <script src="js/zoom-settings.js"></script>
   <script src="js/viewport.js"></script>
   <script src="js/search-navigation.js"></script>
   <script src="js/schema-modal.js"></script>

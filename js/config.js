@@ -25,15 +25,24 @@ const APP_CONFIG = Object.freeze({
   zoom: Object.freeze({
     min: 0.15,
     max: 2.5,
-    // ホイール: deltaY 1px あたりの対数ズーム量 (マウス 1 ノッチ ≒ 100px → 約 6%)
-    wheelSensitivity: 0.0006,
+    // ホイール: deltaY 1px あたりの対数ズーム量の既定値 (= 「標準」)。マウス 1 ノッチ ≒ 100px → 約 13%
+    wheelSensitivity: 0.0012,
     // ホイール 1 イベントあたりの最大倍率 (トラックパッドの急な入力を抑える)
-    wheelMaxFactor: 1.15,
+    wheelMaxFactor: 1.4,
     // deltaMode が行 / ページ単位のときの px 換算
     lineDeltaPx: 16,
     pageDeltaPx: 400,
-    // +/- ボタン 1 回あたりの倍率
-    buttonStep: 1.1,
+    // +/- ボタン 1 回あたりの倍率の既定値 (= 「標準」)
+    buttonStep: 1.2,
+    // ユーザーが選べる感度 (軽い = 少ない操作で大きく動く)
+    sensitivityLevels: Object.freeze([
+      Object.freeze({ id: 'lightest', label: '最も軽い', wheelSensitivity: 0.0026, buttonStep: 1.3 }),
+      Object.freeze({ id: 'light', label: '軽い', wheelSensitivity: 0.0018, buttonStep: 1.25 }),
+      Object.freeze({ id: 'normal', label: '標準', wheelSensitivity: 0.0012, buttonStep: 1.2 }),
+      Object.freeze({ id: 'heavy', label: '重い', wheelSensitivity: 0.0008, buttonStep: 1.15 }),
+      Object.freeze({ id: 'heaviest', label: '最も重い', wheelSensitivity: 0.0005, buttonStep: 1.1 }),
+    ]),
+    defaultSensitivityId: 'normal',
     // テーブルへジャンプするとき、これより小さい倍率なら読みやすい倍率までズームイン
     focusMinScale: 0.9,
     fitMin: 0.2,
