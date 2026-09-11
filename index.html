@@ -131,6 +131,15 @@
       <div id="tables-container" class="absolute inset-0 pointer-events-auto z-10"></div>
     </div>
 
+    <!-- 選択テーブルの詳細パネル -->
+    <aside
+      id="detail-panel"
+      hidden
+      data-no-pan
+      data-no-zoom
+      aria-label="テーブル詳細"
+      class="absolute top-3 right-3 bottom-3 w-[340px] max-w-[calc(100%-1.5rem)] bg-slate-900/95 backdrop-blur-md border border-slate-700 rounded-xl shadow-2xl z-40 flex flex-col overflow-hidden pointer-events-auto select-text"></aside>
+
     <!-- ミニ凡例 / 操作ガイド -->
     <div data-no-pan class="absolute bottom-4 left-4 bg-slate-900/90 backdrop-blur-md border border-slate-800 px-3.5 py-2.5 rounded-xl shadow-xl z-20 flex flex-col gap-1.5 text-xs text-slate-300 pointer-events-auto max-w-sm">
       <div class="flex items-center gap-3 text-[11px] font-medium flex-wrap">
@@ -145,7 +154,7 @@
         </span>
       </div>
       <div class="text-[11px] text-slate-400 border-t border-slate-800 pt-1.5">
-        <span>背景ドラッグ: 移動 / ホイール: ズーム / テーブルドラッグ: 配置変更 / クリック: 関連強調</span>
+        <span>背景ドラッグ: 移動 / ホイール: ズーム / テーブルドラッグ: 配置変更 / クリック: 関連強調 + 詳細表示</span>
       </div>
       <div id="shortcut-hints" class="text-[10px] text-slate-500 font-mono leading-relaxed" title="キーボードショートカット"></div>
     </div>
@@ -250,6 +259,7 @@
   <script src="js/mermaid-export.js"></script>
   <script src="js/card-template.js"></script>
   <script src="js/card-drag.js"></script>
+  <script src="js/detail-panel.js"></script>
   <script src="js/render-tables.js"></script>
   <script src="js/render-connections.js"></script>
   <script src="js/diagram.js"></script>

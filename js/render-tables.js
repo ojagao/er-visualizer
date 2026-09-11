@@ -64,4 +64,5 @@ function renderTables() {
   const cards = tables.map((table) => createTableCard(table, state));
   dom.tablesContainer.replaceChildren(...cards);
   observeCardResizes(cards);
+  renderDetailPanel();
 }

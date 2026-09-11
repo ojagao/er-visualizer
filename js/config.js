@@ -41,6 +41,11 @@ const APP_CONFIG = Object.freeze({
     fitPadding: 80,
   }),
 
+  // 詳細パネル (中央寄せの最小倍率は zoom.focusMinScale を共用)
+  detailPanel: Object.freeze({
+    widthPx: 340,
+  }),
+
   // 初期ビュー
   view: Object.freeze({
     scale: 0.85,

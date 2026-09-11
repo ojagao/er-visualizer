@@ -58,20 +58,23 @@ function animateViewTo(viewPatch) {
   }, viewAnimationMs);
 }
 
-/** 指定テーブルが画面中央に来るよう移動 (小さすぎる倍率なら読みやすい倍率まで拡大) */
+/**
+ * 指定テーブルが画面中央に来るよう移動 (小さすぎる倍率なら読みやすい倍率まで拡大)
+ * 詳細パネルが開いている場合は、パネルに隠れない領域の中央へ寄せる
+ */
 function centerOnTable(tableId) {
   const { positions, view } = appState.get();
   const box = getCardBox(tableId, positions);
   if (!box) return;
 
   const scale = Math.max(view.scale, APP_CONFIG.zoom.focusMinScale);
-  const centerX = box.x + box.width / 2;
-  const centerY = box.y + box.height / 2;
+  const panelWidth = dom.detailPanel && !dom.detailPanel.hidden ? APP_CONFIG.detailPanel.widthPx : 0;
+  const visibleWidth = Math.max(dom.workspace.clientWidth - panelWidth, dom.workspace.clientWidth / 2);
 
   animateViewTo({
     scale,
-    translateX: dom.workspace.clientWidth / 2 - centerX * scale,
-    translateY: dom.workspace.clientHeight / 2 - centerY * scale,
+    translateX: visibleWidth / 2 - (box.x + box.width / 2) * scale,
+    translateY: dom.workspace.clientHeight / 2 - (box.y + box.height / 2) * scale,
   });
 }
 
@@ -158,6 +161,7 @@ function setupWheelZoom() {
   dom.workspace.addEventListener(
     'wheel',
     (event) => {
+      if (event.target.closest('[data-no-zoom]')) return; // 詳細パネル内のスクロールを優先
       event.preventDefault();
       const rect = dom.workspace.getBoundingClientRect();
       zoomAt(
