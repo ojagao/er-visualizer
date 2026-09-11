@@ -13,7 +13,7 @@
   <header class="bg-slate-900/95 backdrop-blur border-b border-slate-800 px-4 py-2 flex flex-wrap items-center justify-between gap-3 z-30 shadow-lg shrink-0">
     <div class="flex items-center gap-3">
       <div class="p-2 bg-gradient-to-tr from-indigo-600 via-blue-600 to-cyan-500 rounded-lg shadow-md shadow-indigo-500/25">
-        <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg aria-hidden="true" class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2 1.5 3 3.5 3h9c2 0 3.5-1 3.5-3V7c0-2-1.5-3-3.5-3h-9C5.5 4 4 5 4 7zm0 5h16M4 12c0 2 1.5 3 3.5 3h9c2 0 3.5-1 3.5-3" />
         </svg>
       </div>
@@ -32,20 +32,20 @@
     <!-- アクションボタングループ -->
     <div class="flex flex-wrap items-center gap-2">
       <!-- スキーマ入力モーダルを開くボタン -->
-      <button
+      <button type="button"
         id="btn-open-schema-modal"
         title="SQL スキーマを入力"
         class="px-3 py-1.5 text-xs font-semibold bg-gradient-to-r from-indigo-600 to-blue-600 hover:from-indigo-500 hover:to-blue-500 text-white rounded-lg shadow-sm shadow-indigo-600/30 transition flex items-center gap-1.5 border border-indigo-400/30">
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        <svg aria-hidden="true" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
         <span>スキーマ入力 (SQL)</span>
       </button>
 
       <!-- 自動整列ボタン -->
-      <button
+      <button type="button"
         id="btn-auto-layout"
         title="テーブルを重ならないよう自動配置"
         class="px-2.5 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-200 font-medium transition flex items-center gap-1.5">
-        <svg class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+        <svg aria-hidden="true" class="w-3.5 h-3.5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
         <span>自動整列</span>
       </button>
 
@@ -55,52 +55,55 @@
           id="search-input"
           type="text"
           placeholder="テーブル / カラム検索..."
+          aria-label="テーブル / カラム検索"
           title="Enter: 一致テーブルへ移動 / Shift+Enter: 逆順"
           class="bg-slate-800 border border-slate-700 rounded-lg pl-2.5 pr-16 py-1.5 text-xs text-slate-100 placeholder-slate-400 focus:outline-none focus:border-indigo-500 w-40 md:w-56 transition"
         />
         <span id="search-count" hidden class="absolute right-7 top-1.5 text-[10px] font-mono leading-4 pointer-events-none select-none"></span>
-        <button id="search-clear" class="hidden absolute right-2 top-1.5 text-slate-400 hover:text-white text-xs">✕</button>
+        <button type="button" id="search-clear" aria-label="検索をクリア" class="hidden absolute right-2 top-1.5 text-slate-400 hover:text-white text-xs">✕</button>
       </div>
 
       <!-- 表示モード切替 -->
-      <button
+      <button type="button"
         id="toggle-columns-btn"
         title="キー列のみ / 全カラム"
+        aria-pressed="false"
         class="px-2.5 py-1.5 text-xs bg-slate-800 hover:bg-slate-700 border border-slate-700 rounded-lg text-slate-300 font-medium transition flex items-center gap-1.5">
-        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
+        <svg aria-hidden="true" class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h7"/></svg>
         <span id="columns-mode-text">主要列のみ</span>
       </button>
 
       <!-- ズーム操作バー -->
       <div class="bg-slate-800 rounded-lg p-0.5 flex items-center gap-1 border border-slate-700">
-        <button id="btn-zoom-out" title="縮小" class="p-1.5 hover:bg-slate-700 rounded text-slate-200 transition">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>
+        <button type="button" id="btn-zoom-out" title="縮小" aria-label="縮小" class="p-1.5 hover:bg-slate-700 rounded text-slate-200 transition">
+          <svg aria-hidden="true" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"/></svg>
         </button>
-        <span id="zoom-label" class="text-xs font-mono text-slate-300 px-1.5 min-w-[45px] text-center select-none font-semibold">100%</span>
-        <button id="btn-zoom-in" title="拡大" class="p-1.5 hover:bg-slate-700 rounded text-slate-200 transition">
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+        <span id="zoom-label" aria-label="ズーム倍率" class="text-xs font-mono text-slate-300 px-1.5 min-w-[45px] text-center select-none font-semibold">100%</span>
+        <button type="button" id="btn-zoom-in" title="拡大" aria-label="拡大" class="p-1.5 hover:bg-slate-700 rounded text-slate-200 transition">
+          <svg aria-hidden="true" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
         </button>
         <div class="w-px h-4 bg-slate-700 mx-0.5"></div>
-        <button id="btn-fit" title="画面全体に収める" class="px-2 py-1 text-xs font-medium hover:bg-slate-700 rounded text-slate-200 transition">
+        <button type="button" id="btn-fit" title="画面全体に収める" class="px-2 py-1 text-xs font-medium hover:bg-slate-700 rounded text-slate-200 transition">
           全体表示
         </button>
       </div>
 
       <!-- エクスポート (Mermaid コピー / JSON 保存) -->
       <div class="bg-slate-800 rounded-lg p-0.5 flex items-center gap-0.5 border border-slate-700">
-        <button
+        <button type="button"
           id="btn-export-mermaid"
           title="Mermaid erDiagram をクリップボードにコピー (Markdown に貼り付けて図として表示できます)"
           class="px-2 py-1 text-xs font-medium hover:bg-slate-700 rounded text-slate-200 transition flex items-center gap-1.5">
-          <svg class="w-3.5 h-3.5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
+          <svg aria-hidden="true" class="w-3.5 h-3.5 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
           <span>Mermaid</span>
         </button>
         <div class="w-px h-4 bg-slate-700 mx-0.5"></div>
-        <button
+        <button type="button"
           id="btn-export-json"
           title="スキーマ定義をJSON保存"
+          aria-label="スキーマ定義を JSON として保存"
           class="p-1.5 hover:bg-slate-700 rounded text-slate-300 transition">
-          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          <svg aria-hidden="true" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
         </button>
       </div>
     </div>
@@ -112,7 +115,7 @@
     <div id="viewport" class="absolute origin-top-left will-change-transform pointer-events-none" style="width: 5000px; height: 5000px;">
 
       <!-- リレーション接続線 SVGレイヤー -->
-      <svg id="connections-svg" class="absolute inset-0 w-full h-full pointer-events-none z-0">
+      <svg id="connections-svg" aria-hidden="true" class="absolute inset-0 w-full h-full pointer-events-none z-0">
         <defs>
           <marker id="marker-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
             <path d="M 0 1 L 10 5 L 0 9 z" fill="#64748b" />
@@ -141,7 +144,7 @@
       class="absolute top-3 right-3 bottom-3 w-[340px] max-w-[calc(100%-1.5rem)] bg-slate-900/95 backdrop-blur-md border border-slate-700 rounded-xl shadow-2xl z-40 flex flex-col overflow-hidden pointer-events-auto select-text"></aside>
 
     <!-- ミニ凡例 / 操作ガイド -->
-    <div data-no-pan class="absolute bottom-4 left-4 bg-slate-900/90 backdrop-blur-md border border-slate-800 px-3.5 py-2.5 rounded-xl shadow-xl z-20 flex flex-col gap-1.5 text-xs text-slate-300 pointer-events-auto max-w-sm">
+    <aside data-no-pan aria-label="凡例と操作ガイド" class="absolute bottom-4 left-4 bg-slate-900/90 backdrop-blur-md border border-slate-800 px-3.5 py-2.5 rounded-xl shadow-xl z-20 flex flex-col gap-1.5 text-xs text-slate-300 pointer-events-auto max-w-sm">
       <div class="flex items-center gap-3 text-[11px] font-medium flex-wrap">
         <span class="flex items-center gap-1.5">
           <span class="w-2.5 h-2.5 rounded-sm bg-amber-400"></span> PK (主キー)
@@ -154,10 +157,10 @@
         </span>
       </div>
       <div class="text-[11px] text-slate-400 border-t border-slate-800 pt-1.5">
-        <span>背景ドラッグ: 移動 / ホイール: ズーム / テーブルドラッグ: 配置変更 / クリック: 関連強調 + 詳細表示</span>
+        <span>背景ドラッグ: 移動 / ホイール: ズーム / テーブルドラッグ: 配置変更 / クリック: 関連強調 + 詳細表示 / Tab + Enter: キーボードで選択</span>
       </div>
       <div id="shortcut-hints" class="text-[10px] text-slate-500 font-mono leading-relaxed" title="キーボードショートカット"></div>
-    </div>
+    </aside>
   </main>
 
   <!-- トースト通知 -->
@@ -166,7 +169,7 @@
   <div id="drop-overlay" hidden class="fixed inset-0 z-[70] p-3 pointer-events-none">
     <div class="w-full h-full rounded-2xl border-4 border-dashed border-indigo-400/80 bg-indigo-950/70 backdrop-blur-sm flex items-center justify-center">
       <div class="text-center space-y-2">
-        <svg class="w-12 h-12 mx-auto text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
+        <svg aria-hidden="true" class="w-12 h-12 mx-auto text-indigo-300" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
         <p class="text-lg font-bold text-white">ファイルをドロップして読み込み</p>
         <p class="text-xs text-indigo-200">SQL (.sql / .ddl / .txt) または本アプリでエクスポートした JSON</p>
       </div>
@@ -174,19 +177,19 @@
   </div>
 
   <!-- スキーマ入力・インポートモーダル -->
-  <div id="schema-modal" class="fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4 hidden">
+  <div id="schema-modal" role="dialog" aria-modal="true" aria-labelledby="schema-modal-title" class="fixed inset-0 modal-backdrop z-50 flex items-center justify-center p-4 hidden">
     <div class="modal-panel bg-slate-900 border border-slate-700 rounded-2xl shadow-2xl w-full max-w-3xl flex flex-col max-h-[90vh] overflow-hidden">
 
       <!-- モーダルヘッダー -->
       <div class="px-6 py-4 border-b border-slate-800 flex items-center justify-between bg-slate-900/80">
         <div>
-          <h2 class="text-base font-bold text-white flex items-center gap-2">
-            <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
+          <h2 id="schema-modal-title" class="text-base font-bold text-white flex items-center gap-2">
+            <svg aria-hidden="true" class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/></svg>
             SQLスキーマ (DDL) のインポート
           </h2>
           <p class="text-xs text-slate-400 mt-0.5">PostgreSQL, MySQL, SQLite等の CREATE TABLE / ALTER TABLE 文を解析します。作業内容はこのブラウザに自動保存されます</p>
         </div>
-        <button id="btn-close-modal" class="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition">✕</button>
+        <button type="button" id="btn-close-modal" aria-label="閉じる" class="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition">✕</button>
       </div>
 
       <!-- モーダルコンテンツ -->
@@ -194,18 +197,18 @@
         <!-- プリセット選択バー -->
         <div class="flex items-center justify-between gap-2 flex-wrap bg-slate-800/60 p-2.5 rounded-xl border border-slate-800">
           <div class="flex items-center gap-2">
-            <button id="btn-open-file" class="px-2.5 py-1 text-xs font-semibold bg-indigo-600/80 hover:bg-indigo-500 rounded-md text-white transition flex items-center gap-1.5">
-              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+            <button type="button" id="btn-open-file" class="px-2.5 py-1 text-xs font-semibold bg-indigo-600/80 hover:bg-indigo-500 rounded-md text-white transition flex items-center gap-1.5">
+              <svg aria-hidden="true" class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
               <span>ファイルを開く…</span>
             </button>
             <input id="file-input" type="file" class="hidden" />
             <span class="text-xs font-semibold text-slate-300 ml-2">サンプル:</span>
           </div>
           <div class="flex gap-2">
-            <button id="preset-blog" class="px-2.5 py-1 text-xs bg-slate-700 hover:bg-indigo-600 rounded-md text-slate-200 transition">ブログ / CMS</button>
-            <button id="preset-ecommerce" class="px-2.5 py-1 text-xs bg-slate-700 hover:bg-indigo-600 rounded-md text-slate-200 transition">ECショップ</button>
-            <button id="preset-clear" class="px-2.5 py-1 text-xs bg-slate-800 hover:bg-rose-900/50 text-slate-400 hover:text-rose-200 rounded-md border border-slate-700 transition">クリア</button>
-            <button id="preset-reset" title="保存された作業内容を消去してサンプルに戻す" class="px-2.5 py-1 text-xs bg-slate-800 hover:bg-rose-900/50 text-slate-400 hover:text-rose-200 rounded-md border border-slate-700 transition">初期状態に戻す</button>
+            <button type="button" id="preset-blog" class="px-2.5 py-1 text-xs bg-slate-700 hover:bg-indigo-600 rounded-md text-slate-200 transition">ブログ / CMS</button>
+            <button type="button" id="preset-ecommerce" class="px-2.5 py-1 text-xs bg-slate-700 hover:bg-indigo-600 rounded-md text-slate-200 transition">ECショップ</button>
+            <button type="button" id="preset-clear" class="px-2.5 py-1 text-xs bg-slate-800 hover:bg-rose-900/50 text-slate-400 hover:text-rose-200 rounded-md border border-slate-700 transition">クリア</button>
+            <button type="button" id="preset-reset" title="保存された作業内容を消去してサンプルに戻す" class="px-2.5 py-1 text-xs bg-slate-800 hover:bg-rose-900/50 text-slate-400 hover:text-rose-200 rounded-md border border-slate-700 transition">初期状態に戻す</button>
           </div>
         </div>
 
@@ -234,12 +237,12 @@
 
       <!-- モーダルフッター -->
       <div class="px-6 py-3.5 border-t border-slate-800 bg-slate-900/80 flex items-center justify-between">
-        <div id="parse-status-msg" class="text-xs text-slate-400 font-mono"></div>
+        <div id="parse-status-msg" role="status" aria-live="polite" class="text-xs text-slate-400 font-mono"></div>
         <div class="flex items-center gap-2">
-          <button id="btn-cancel-modal" class="px-4 py-2 text-xs font-medium text-slate-400 hover:text-slate-200 transition">キャンセル</button>
-          <button id="btn-parse-and-render" class="px-5 py-2 text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl shadow-md shadow-indigo-600/30 transition flex items-center gap-2">
+          <button type="button" id="btn-cancel-modal" class="px-4 py-2 text-xs font-medium text-slate-400 hover:text-slate-200 transition">キャンセル</button>
+          <button type="button" id="btn-parse-and-render" class="px-5 py-2 text-xs font-semibold bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl shadow-md shadow-indigo-600/30 transition flex items-center gap-2">
             <span>ER図を生成する</span>
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+            <svg aria-hidden="true" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
           </button>
         </div>
       </div>

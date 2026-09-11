@@ -91,3 +91,26 @@
 .toast.is-leaving {
   animation: toast-out 200ms ease-in forwards;
 }
+/* キーボード操作時のフォーカスリング (マウスクリック時は表示しない) */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid #818cf8;
+  outline-offset: 2px;
+}
+
+.draggable-card:focus-visible {
+  outline-offset: 3px;
+}
+
+/* 動きを減らす設定のユーザーにはトランジション・アニメーションを省く */
+@media (prefers-reduced-motion: reduce) {
+  .relation-path,
+  .draggable-card,
+  .modal-panel,
+  #viewport {
+    transition: none !important;
+    animation: none !important;
+  }
+}

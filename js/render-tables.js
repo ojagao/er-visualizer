@@ -43,15 +43,33 @@ function createTableCard(table, state) {
     searchQuery: state.searchQuery,
   });
 
+  // キーボード操作: Tab で移動、Enter / Space で選択トグル
+  card.tabIndex = 0;
+  card.setAttribute('role', 'button');
+  card.setAttribute('aria-pressed', String(state.selectedTableId === table.id));
+  card.setAttribute('aria-label', `テーブル ${table.name} (${table.columns.length} 列)`);
+
   setupCardDrag(card, table.id, renderConnections);
 
   card.addEventListener('click', () => {
     if (card.dataset.dragged === 'true') return;
-    toggleSelectedTable(table.id);
-    renderDiagram();
+    toggleTableSelection(table.id);
+  });
+
+  card.addEventListener('keydown', (event) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    toggleTableSelection(table.id, { restoreFocus: true });
   });
 
   return card;
+}
+
+/** 選択をトグルして再描画。キーボード操作時は再生成されたカードへフォーカスを戻す */
+function toggleTableSelection(tableId, { restoreFocus = false } = {}) {
+  toggleSelectedTable(tableId);
+  renderDiagram();
+  if (restoreFocus) document.getElementById(`table-card-${tableId}`)?.focus();
 }
 
 /** 全テーブルカードを再描画 */
