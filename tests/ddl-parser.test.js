@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const { loadScripts, plain } = require('./load-scripts');
 
 const { UniversalDDLParser, SCHEMA_PRESETS } = loadScripts(
-  ['config.js', 'presets.js', 'ddl-parser.js'],
+  ['config.js', 'presets.js', 'cardinality.js', 'ddl-parser.js'],
   ['UniversalDDLParser', 'SCHEMA_PRESETS'],
 );
 

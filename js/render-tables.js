@@ -41,6 +41,7 @@ function createTableCard(table, state) {
   card.innerHTML = renderCardHtml(table, {
     visibleColumns: getVisibleColumns(table, state.showOnlyKeys),
     searchQuery: state.searchQuery,
+    junctionTargets: getJunctionTargets(table, state.schema.relations),
   });
 
   // キーボード操作: Tab で移動、Enter / Space で選択トグル

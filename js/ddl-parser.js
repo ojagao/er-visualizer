@@ -492,9 +492,13 @@ class UniversalDDLParser {
       ? inferRelations(alteredTables, explicitRelations)
       : { tables: alteredTables, relations: [] };
 
-    return {
-      tables: assignCategories(inferred.tables),
-      relations: [...explicitRelations, ...inferred.relations],
-    };
+    const tables = assignCategories(inferred.tables);
+    const tablesById = new Map(tables.map((table) => [table.id, table]));
+    const relations = [...explicitRelations, ...inferred.relations].map((rel) => ({
+      ...rel,
+      type: resolveCardinality(rel, tablesById).type,
+    }));
+
+    return { tables, relations };
   }
 }

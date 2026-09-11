@@ -66,7 +66,13 @@ function renderOmittedNotice(table, visibleColumns) {
  * @param {object} table
  * @param {{visibleColumns: object[], searchQuery: string}} options
  */
-function renderCardHtml(table, { visibleColumns, searchQuery }) {
+function renderJunctionBadge(junctionTargets) {
+  if (!junctionTargets?.length) return '';
+  const title = `中間テーブル: ${junctionTargets.join(' と ')} の多対多 (N:N) を表現`;
+  return `<span class="px-1.5 py-0.5 text-[9px] font-bold rounded border bg-slate-700/60 text-slate-200 border-slate-500/50 shrink-0" title="${escapeHtml(title)}">N:N</span>`;
+}
+
+function renderCardHtml(table, { visibleColumns, searchQuery, junctionTargets = [] }) {
   const style = resolveCategoryStyle(table.category);
   const name = escapeHtml(table.name);
 
@@ -77,9 +83,12 @@ function renderCardHtml(table, { visibleColumns, searchQuery }) {
         <span class="w-2 h-2 rounded-full bg-slate-400"></span>
         <span class="font-mono font-bold text-sm text-white tracking-wide truncate" title="${name}">${name}</span>
       </div>
-      <span class="px-2 py-0.5 text-[10px] font-semibold rounded border uppercase tracking-wider ${style.badge}">
-        ${table.columns.length} cols
-      </span>
+      <div class="flex items-center gap-1 shrink-0">
+        ${renderJunctionBadge(junctionTargets)}
+        <span class="px-2 py-0.5 text-[10px] font-semibold rounded border uppercase tracking-wider ${style.badge}">
+          ${table.columns.length} cols
+        </span>
+      </div>
     </div>
     <div data-scroll-area class="p-2 space-y-1 max-h-[380px] overflow-y-auto font-mono text-xs">
       ${visibleColumns.map((col) => renderColumnRow(col, searchQuery)).join('')}
